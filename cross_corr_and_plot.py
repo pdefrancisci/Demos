@@ -19,9 +19,9 @@ def main():
         yThresh = 0
         target2 = get_correlated_vars(data,target,0)
     if len(sys.argv) == 7:
-        spec_target_name = sys.argv[6]
+        spec_target_name = sys.argv[6].split(',')
     else:
-        spec_target_name = ""
+        spec_target_name = list()
     plot_target_vars(data,target2,target,spec_target_name,xThresh,yThresh)
 
 #ptv: given a column as an x and y axis, plot the two against each other.
@@ -34,10 +34,11 @@ def plot_target_vars(data,target1,target2,name,xThresh,yThresh):
             continue
         if yThresh and row[1][target2] < yThresh:
             continue
-        if name and str(row[1][1]) == name:
+        if name and str(row[1][1]) in name:
             plt.text(row[1][target1],row[1][target2],str(row[1][1]))
         xaxis.append(row[1][target1])
         yaxis.append((row[1][target2]))
+    plt.title(str(target2)+" over "+str(target1))
     plt.xlabel(target1)
     plt.ylabel(target2)
     plt.plot(np.unique(xaxis), np.poly1d(np.polyfit(xaxis, yaxis, 1))(np.unique(xaxis)))
